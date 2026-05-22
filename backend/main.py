@@ -2,6 +2,11 @@ import os
 import random
 import re
 import requests
+from dotenv import load_dotenv
+
+# Load .env file from backend directory (where GROK_API_KEY lives)
+load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
+
 from fastapi import FastAPI, Depends, HTTPException, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
@@ -29,6 +34,26 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Root health check route
+@app.get("/")
+def root():
+    return {
+        "platform": "BharatSync AI",
+        "tagline": "AI Governance Intelligence & Smart Escalation Platform",
+        "version": "1.0.0",
+        "status": "🟢 OPERATIONAL",
+        "frontend": "http://localhost:3000",
+        "api_docs": "http://localhost:8000/docs",
+        "endpoints": {
+            "complaints": "/api/complaints",
+            "dashboard_stats": "/api/dashboard/stats",
+            "analytics": "/api/dashboard/analytics",
+            "departments": "/api/departments",
+            "chatbot": "/api/chatbot [POST]",
+            "escalation_audit": "/api/escalate/audit [POST]"
+        }
+    }
 
 # Startup Handler to seed database and initialize indexes
 @app.on_event("startup")
