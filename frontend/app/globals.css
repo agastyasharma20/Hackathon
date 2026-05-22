@@ -1,0 +1,185 @@
+@import "tailwindcss";
+
+@theme {
+  --color-cyber-bg: #030712;
+  --color-cyber-dark: #070a13;
+  --color-cyber-gray: #0f172a;
+  --color-neon-blue: #00d2ff;
+  --color-neon-cyan: #06b6d4;
+  --color-neon-teal: #14b8a6;
+  --color-neon-purple: #8b5cf6;
+  --color-neon-pink: #ec4899;
+  --color-neon-green: #10b981;
+  --color-neon-red: #ef4444;
+  --color-neon-orange: #f59e0b;
+
+  --animate-pulse-glow: pulse-glow 2s infinite alternate;
+  --animate-scanline: scanline 10s linear infinite;
+  --animate-matrix: matrix 20s linear infinite;
+  --animate-grid-fade: grid-fade 8s infinite alternate;
+
+  @keyframes pulse-glow {
+    0% { box-shadow: 0 0 5px rgba(6, 182, 212, 0.15), inset 0 0 5px rgba(6, 182, 212, 0.05); }
+    100% { box-shadow: 0 0 25px rgba(6, 182, 212, 0.5), inset 0 0 10px rgba(6, 182, 212, 0.15); }
+  }
+  @keyframes scanline {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(1000%); }
+  }
+  @keyframes grid-fade {
+    0% { opacity: 0.25; }
+    50% { opacity: 0.4; }
+    100% { opacity: 0.25; }
+  }
+}
+
+:root {
+  --background: #030712;
+  --foreground: #f8fafc;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #070a13;
+}
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #06b6d4;
+  box-shadow: 0 0 8px #06b6d4;
+}
+
+/* Futuristic Cyber Cards & Glassmorphism */
+.cyber-panel {
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(30, 41, 59, 0.6);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cyber-panel:hover {
+  border-color: rgba(6, 182, 212, 0.5);
+  box-shadow: 0 8px 32px 0 rgba(6, 182, 212, 0.1);
+}
+
+.cyber-panel-active {
+  border-color: rgba(6, 182, 212, 0.8);
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.25), inset 0 0 10px rgba(6, 182, 212, 0.1);
+}
+
+.cyber-panel-danger {
+  border-color: rgba(239, 68, 68, 0.5);
+}
+.cyber-panel-danger:hover {
+  border-color: rgba(239, 68, 68, 0.8);
+  box-shadow: 0 8px 32px 0 rgba(239, 68, 68, 0.15);
+}
+
+/* Glowing text effects */
+.glow-text-cyan {
+  text-shadow: 0 0 10px rgba(6, 182, 212, 0.6), 0 0 20px rgba(6, 182, 212, 0.2);
+}
+.glow-text-purple {
+  text-shadow: 0 0 10px rgba(139, 92, 246, 0.6), 0 0 20px rgba(139, 92, 246, 0.2);
+}
+.glow-text-red {
+  text-shadow: 0 0 10px rgba(239, 68, 68, 0.6), 0 0 20px rgba(239, 68, 68, 0.2);
+}
+
+/* Glowing buttons */
+.cyber-btn {
+  position: relative;
+  background: linear-gradient(135deg, #0f172a 0%, #020617 100%);
+  border: 1px solid #1e293b;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+.cyber-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.2), transparent);
+  transition: 0.5s;
+}
+.cyber-btn:hover::before {
+  left: 100%;
+}
+.cyber-btn:hover {
+  border-color: #06b6d4;
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.3);
+  color: #00d2ff;
+}
+
+.cyber-btn-cyan {
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.2) 0%, rgba(8, 145, 178, 0.1) 100%);
+  border-color: #06b6d4;
+  color: #22d3ee;
+}
+.cyber-btn-cyan:hover {
+  background: #06b6d4;
+  color: #030712;
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.5);
+}
+
+/* Futuristic grid overlays */
+.cyber-grid {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(30, 41, 59, 0.25) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(30, 41, 59, 0.25) 1px, transparent 1px);
+}
+
+.cyber-grid-fine {
+  background-size: 20px 20px;
+  background-image: 
+    linear-gradient(to right, rgba(6, 182, 212, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(6, 182, 212, 0.08) 1px, transparent 1px);
+}
+
+/* Leaflet dark theme map adjustments */
+.leaflet-container {
+  background: #070a13 !important;
+}
+.leaflet-bar {
+  border: 1px solid rgba(6, 182, 212, 0.4) !important;
+  background: rgba(15, 23, 42, 0.8) !important;
+}
+.leaflet-bar a {
+  background: transparent !important;
+  color: #06b6d4 !important;
+  border-bottom: 1px solid rgba(6, 182, 212, 0.2) !important;
+}
+.leaflet-bar a:hover {
+  background: #06b6d4 !important;
+  color: #030712 !important;
+}
+.leaflet-popup-content-wrapper {
+  background: rgba(15, 23, 42, 0.95) !important;
+  border: 1px solid #06b6d4 !important;
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.3) !important;
+  color: #f8fafc !important;
+  backdrop-filter: blur(10px);
+}
+.leaflet-popup-tip {
+  background: #0f172a !important;
+  border-left: 1px solid #06b6d4 !important;
+  border-bottom: 1px solid #06b6d4 !important;
+}
