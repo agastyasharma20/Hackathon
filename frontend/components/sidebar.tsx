@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -9,12 +9,12 @@ import {
   BarChart3,
   Map,
   Building2,
-  FileSpreadsheet,
   AlertTriangle,
   MessageSquareCode,
   Compass,
   Activity,
-  Cpu
+  Cpu,
+  Zap,
 } from "lucide-react";
 
 interface SidebarItem {
@@ -22,117 +22,246 @@ interface SidebarItem {
   path: string;
   icon: React.ComponentType<any>;
   badge?: string;
-  badgeColor?: string;
+  badgeVariant?: "cyan" | "red" | "amber" | "green";
 }
+
+const navigationItems: SidebarItem[] = [
+  { name: "Terminal Welcome", path: "/", icon: Compass },
+  { name: "Citizen AI Portal", path: "/portal", icon: MessageSquareCode, badge: "LIVE", badgeVariant: "green" },
+  { name: "Governance Control", path: "/dashboard", icon: LayoutDashboard },
+  { name: "Smart Escalations", path: "/escalations", icon: ShieldAlert, badge: "12", badgeVariant: "red" },
+  { name: "Complaint Analytics", path: "/analytics", icon: BarChart3 },
+  { name: "Geospatial Heatmap", path: "/heatmap", icon: Map },
+  { name: "Department Control", path: "/departments", icon: Building2 },
+  { name: "Systemic Risk Desk", path: "/risk", icon: AlertTriangle, badge: "3", badgeVariant: "amber" },
+  { name: "AI-Gov Chatbot", path: "/chatbot", icon: Cpu, badge: "AI", badgeVariant: "cyan" },
+];
+
+const badgeStyles: Record<string, string> = {
+  cyan: "bg-cyan-500/15 text-cyan-400 border border-cyan-500/30",
+  red: "bg-red-500/15 text-red-400 border border-red-500/30",
+  amber: "bg-amber-500/15 text-amber-400 border border-amber-500/30",
+  green: "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30",
+};
 
 export const Sidebar: React.FC = () => {
   const pathname = usePathname();
+  const [time, setTime] = useState(new Date());
 
-  const navigationItems: SidebarItem[] = [
-    { name: "Terminal Welcome", path: "/", icon: Compass },
-    { name: "Citizen AI Portal", path: "/portal", icon: MessageSquareCode, badge: "Live" },
-    { name: "Governance Control", path: "/dashboard", icon: LayoutDashboard },
-    { name: "Smart Escalations", path: "/escalations", icon: ShieldAlert, badge: "12", badgeColor: "bg-red-500/20 text-red-400 border border-red-500/30" },
-    { name: "Complaint Analytics", path: "/analytics", icon: BarChart3 },
-    { name: "Geospatial Heatmap", path: "/heatmap", icon: Map },
-    { name: "Department Control", path: "/departments", icon: Building2 },
-    { name: "Systemic Risk Desk", path: "/risk", icon: AlertTriangle, badge: "3 Alert", badgeColor: "bg-amber-500/20 text-amber-400 border border-amber-500/30" },
-    { name: "AI AI-Gov Chatbot", path: "/chatbot", icon: Cpu },
-  ];
+  useEffect(() => {
+    const t = setInterval(() => setTime(new Date()), 1000);
+    return () => clearInterval(t);
+  }, []);
 
   return (
-    <aside className="fixed top-0 left-0 h-screen w-72 bg-cyber-dark border-r border-slate-800/80 flex flex-col z-40 select-none shadow-[4px_0_24px_rgba(0,0,0,0.5)]">
-      {/* Background cyber grid effect */}
-      <div className="absolute inset-0 cyber-grid-fine opacity-20 pointer-events-none" />
-      
-      {/* Brand Header */}
-      <div className="relative p-6 border-b border-slate-800/80 flex items-center space-x-3 overflow-hidden bg-slate-950/40">
-        <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-neon-cyan to-transparent animate-pulse" />
-        <div className="p-2 rounded-lg bg-neon-cyan/10 border border-neon-cyan/30 shadow-[0_0_12px_rgba(6,182,212,0.2)]">
-          <Activity className="w-6 h-6 text-neon-cyan animate-pulse" />
+    <aside
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "280px",
+        height: "100vh",
+        zIndex: 50,
+        display: "flex",
+        flexDirection: "column",
+        backgroundColor: "#070a13",
+        borderRight: "1px solid rgba(30,41,59,0.7)",
+        boxShadow: "4px 0 30px rgba(0,0,0,0.6)",
+        overflow: "hidden",
+      }}
+    >
+      {/* Fine grid overlay */}
+      <div className="absolute inset-0 cyber-grid-fine opacity-25 pointer-events-none" />
+
+      {/* Top glow line */}
+      <div
+        className="absolute top-0 left-0 w-full h-[1px] pointer-events-none"
+        style={{ background: "linear-gradient(90deg, transparent, #06b6d4, transparent)" }}
+      />
+
+      {/* ─── Brand Header ─── */}
+      <div
+        style={{
+          padding: "20px 20px 16px",
+          borderBottom: "1px solid rgba(30,41,59,0.7)",
+          background: "rgba(15,23,42,0.5)",
+          position: "relative",
+          flexShrink: 0,
+        }}
+      >
+        <div className="flex items-center gap-3">
+          <div
+            style={{
+              padding: "8px",
+              borderRadius: "10px",
+              background: "rgba(6,182,212,0.1)",
+              border: "1px solid rgba(6,182,212,0.3)",
+              boxShadow: "0 0 15px rgba(6,182,212,0.15)",
+            }}
+          >
+            <Activity className="w-5 h-5 text-cyan-400 animate-pulse" />
+          </div>
+          <div>
+            <h1 className="font-bold text-base tracking-widest text-slate-100 uppercase" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+              BharatSync <span className="text-cyan-400 glow-text-cyan">AI</span>
+            </h1>
+            <p className="text-[9px] text-slate-500 tracking-widest uppercase" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+              Gov-Intelligence OS v4.8
+            </p>
+          </div>
         </div>
-        <div>
-          <h1 className="font-bold text-lg tracking-wider text-slate-100 uppercase font-mono">
-            BharatSync <span className="text-neon-cyan glow-text-cyan">AI</span>
-          </h1>
-          <p className="text-[10px] text-slate-500 font-mono tracking-widest uppercase">
-            Gov-Intelligence OS v4.8
-          </p>
+
+        {/* Live clock */}
+        <div
+          className="mt-3 px-3 py-1.5 rounded-lg flex items-center justify-between"
+          style={{ background: "rgba(6,182,212,0.06)", border: "1px solid rgba(6,182,212,0.12)" }}
+        >
+          <span className="text-[9px] text-slate-500 uppercase tracking-wider" style={{ fontFamily: "monospace" }}>SYSTEM CLOCK</span>
+          <span className="text-[10px] text-cyan-400 font-mono tabular-nums" suppressHydrationWarning>
+            {time.toLocaleTimeString("en-IN", { hour12: false })}
+          </span>
         </div>
       </div>
 
-      {/* Navigation List */}
-      <nav className="flex-1 overflow-y-auto px-4 py-6 space-y-1.5 relative scrollbar-thin">
+      {/* ─── Navigation ─── */}
+      <nav
+        style={{
+          flex: 1,
+          overflowY: "auto",
+          padding: "12px 12px",
+          display: "flex",
+          flexDirection: "column",
+          gap: "2px",
+        }}
+      >
+        <p className="text-[9px] text-slate-600 uppercase tracking-widest px-2 mb-2" style={{ fontFamily: "monospace" }}>
+          Navigation Matrix
+        </p>
         {navigationItems.map((item) => {
           const isActive = pathname === item.path;
           const Icon = item.icon;
-
           return (
             <Link
               key={item.path}
               href={item.path}
-              className={`flex items-center justify-between px-4 py-3 rounded-lg font-mono text-sm tracking-wide transition-all duration-300 relative group overflow-hidden ${
-                isActive
-                  ? "bg-slate-900/60 border border-neon-cyan/50 text-neon-cyan shadow-[inset_0_0_12px_rgba(6,182,212,0.08)]"
-                  : "text-slate-400 border border-transparent hover:text-slate-200 hover:bg-slate-900/30 hover:border-slate-800/50"
-              }`}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                padding: "10px 12px",
+                borderRadius: "10px",
+                border: isActive ? "1px solid rgba(6,182,212,0.4)" : "1px solid transparent",
+                background: isActive ? "rgba(6,182,212,0.07)" : "transparent",
+                color: isActive ? "#22d3ee" : "#94a3b8",
+                textDecoration: "none",
+                transition: "all 0.2s ease",
+                position: "relative",
+                overflow: "hidden",
+              }}
+              className="group hover:!bg-slate-900/50 hover:!border-slate-700/60 hover:!text-slate-200"
             >
-              {/* Active glow pointer */}
+              {/* Active left bar */}
               {isActive && (
-                <div className="absolute left-0 top-0 w-[3px] h-full bg-neon-cyan shadow-[0_0_10px_#06b6d4]" />
+                <div
+                  style={{
+                    position: "absolute",
+                    left: 0,
+                    top: "4px",
+                    bottom: "4px",
+                    width: "3px",
+                    borderRadius: "0 2px 2px 0",
+                    background: "#06b6d4",
+                    boxShadow: "0 0 8px #06b6d4",
+                  }}
+                />
               )}
-              
-              <div className="flex items-center space-x-3.5 z-10">
-                <Icon className={`w-[18px] h-[18px] transition-transform duration-300 group-hover:scale-110 ${
-                  isActive ? "text-neon-cyan" : "text-slate-500 group-hover:text-neon-cyan"
-                }`} />
-                <span className="font-medium">{item.name}</span>
+              <div className="flex items-center gap-3" style={{ paddingLeft: isActive ? "4px" : "0" }}>
+                <Icon
+                  style={{
+                    width: "15px",
+                    height: "15px",
+                    flexShrink: 0,
+                    color: isActive ? "#22d3ee" : "#64748b",
+                    transition: "color 0.2s",
+                  }}
+                  className="group-hover:!text-cyan-400"
+                />
+                <span
+                  className="text-[12px] font-medium tracking-wide"
+                  style={{ fontFamily: "'JetBrains Mono', monospace" }}
+                >
+                  {item.name}
+                </span>
               </div>
-
               {item.badge && (
-                <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold tracking-wider font-mono z-10 ${
-                  item.badgeColor || "bg-neon-cyan/15 text-neon-cyan border border-neon-cyan/30"
-                }`}>
+                <span
+                  className={`text-[9px] font-bold px-1.5 py-0.5 rounded-md tracking-wider ${
+                    badgeStyles[item.badgeVariant || "cyan"]
+                  }`}
+                  style={{ fontFamily: "monospace" }}
+                >
                   {item.badge}
                 </span>
               )}
-              
-              {/* Futuristic scanning hover overlay */}
-              <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full bg-gradient-to-r from-transparent via-slate-800/10 to-transparent transition-transform duration-1000 ease-out" />
             </Link>
           );
         })}
       </nav>
 
-      {/* Control Room Telemetry dial at footer of sidebar */}
-      <div className="relative p-5 border-t border-slate-800/80 bg-slate-950/40 font-mono text-[11px] text-slate-400 space-y-3 z-10">
-        <div className="absolute inset-0 cyber-grid-fine opacity-10 pointer-events-none" />
-        
-        <div className="flex items-center justify-between">
-          <span className="text-slate-500">SLA COMPLIANCE</span>
-          <span className="text-neon-teal font-semibold">84.6%</span>
+      {/* ─── Footer Telemetry ─── */}
+      <div
+        style={{
+          padding: "14px 16px",
+          borderTop: "1px solid rgba(30,41,59,0.7)",
+          background: "rgba(15,23,42,0.5)",
+          flexShrink: 0,
+        }}
+      >
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-[9px] text-slate-500 uppercase tracking-wider" style={{ fontFamily: "monospace" }}>SLA Compliance</span>
+          <span className="text-[10px] text-teal-400 font-bold" style={{ fontFamily: "monospace" }}>84.6%</span>
         </div>
-        <div className="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden border border-slate-800">
-          <div className="bg-gradient-to-r from-neon-blue to-neon-teal h-full w-[84.6%] shadow-[0_0_8px_#14b8a6]" />
+        <div style={{ height: "3px", borderRadius: "2px", background: "#1e293b", overflow: "hidden", marginBottom: "12px" }}>
+          <div
+            style={{
+              height: "100%",
+              width: "84.6%",
+              background: "linear-gradient(90deg, #00d2ff, #14b8a6)",
+              boxShadow: "0 0 6px #14b8a6",
+              borderRadius: "2px",
+            }}
+          />
         </div>
 
-        <div className="grid grid-cols-2 gap-2 text-[10px] pt-1">
-          <div className="bg-slate-900/50 p-2 rounded border border-slate-800/50">
-            <div className="text-slate-500 text-[9px] uppercase">Active Nodes</div>
-            <div className="text-slate-200 font-bold mt-0.5 flex items-center">
-              <span className="w-1.5 h-1.5 rounded-full bg-neon-green mr-1.5 animate-ping" />
-              18 Zones
+        <div className="grid grid-cols-2 gap-2 mb-3">
+          <div
+            className="p-2 rounded-lg"
+            style={{ background: "rgba(30,41,59,0.5)", border: "1px solid rgba(30,41,59,0.7)" }}
+          >
+            <div className="text-[8px] text-slate-500 uppercase mb-1" style={{ fontFamily: "monospace" }}>Active Zones</div>
+            <div className="flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping inline-block" />
+              <span className="text-[11px] text-slate-200 font-bold">18</span>
             </div>
           </div>
-          <div className="bg-slate-900/50 p-2 rounded border border-slate-800/50">
-            <div className="text-slate-500 text-[9px] uppercase">AI Confidence</div>
-            <div className="text-neon-cyan font-bold mt-0.5">94.2% avg</div>
+          <div
+            className="p-2 rounded-lg"
+            style={{ background: "rgba(30,41,59,0.5)", border: "1px solid rgba(30,41,59,0.7)" }}
+          >
+            <div className="text-[8px] text-slate-500 uppercase mb-1" style={{ fontFamily: "monospace" }}>AI Confidence</div>
+            <div className="text-[11px] text-cyan-400 font-bold" style={{ fontFamily: "monospace" }}>94.2%</div>
           </div>
         </div>
 
-        <div className="flex justify-between items-center text-[9px] text-slate-500 pt-1 border-t border-slate-800/30">
-          <span>DM CONSOLE DISPATCH</span>
-          <span className="text-neon-cyan animate-pulse">● READY</span>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-1.5">
+            <Zap className="w-3 h-3 text-cyan-400" />
+            <span className="text-[9px] text-slate-500 uppercase" style={{ fontFamily: "monospace" }}>DM Console</span>
+          </div>
+          <span className="text-[9px] text-emerald-400 flex items-center gap-1" style={{ fontFamily: "monospace" }}>
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse inline-block" />
+            READY
+          </span>
         </div>
       </div>
     </aside>
